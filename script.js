@@ -641,7 +641,7 @@
     updateAccUI();
     updateClock();
     setInterval(updateClock, 50);
-    setInterval(fetchAndRender, 3 * 60 * 1000);
+    setInterval(fetchAndRender, 60000);
     setInterval(updateDurations, 1000);
     setInterval(updateRunTime, 1000);
     updateRunTime();
