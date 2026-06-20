@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>2026世界杯 · 实时比分与竞猜</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+</head>
+<body>
+  <div class="app" id="app">
+    <div class="header">
+      <div class="logo">⚽ 2026世界杯<span>LIVE</span></div>
+      <div class="clock">🇨🇳 <span id="beijingClock">--:--:--.---</span></div>
+    </div>
+    <div class="toolbar">
+      <label>👤 账号</label>
+      <select id="accountSelect"></select>
+      <button class="btn" id="newAccountBtn">＋ 新建</button>
+      <button class="btn danger" id="deleteAccountBtn">🗑 删除</button>
+      <button class="btn clear" id="clearPredBtn">🧹 清空</button>
+      <button class="btn settings" id="settingsBtn">⚙️ 设置</button>
+      <button class="btn export" id="exportBtn">📤 导出</button>
+      <button class="btn import" id="importBtn">📥 导入</button>
+    </div>
+    <div class="stats" id="statsRow">
+      <div class="stat-item"><div class="stat-value" id="totalPred">0</div><div class="stat-desc">已预测</div></div>
+      <div class="stat-item"><div class="stat-value" id="correctPred">0</div><div class="stat-desc">正确</div></div>
+      <div class="stat-item"><div class="stat-value" id="pendingPred">0</div><div class="stat-desc">等待</div></div>
+    </div>
+    <div class="status-row">
+      <span id="updateTime" style="color:#94a3b8;">⏱️ 加载中…</span>
+      <div style="display:flex; gap:1rem; align-items:center;">
+        <span style="color:#7f8ea8; font-size:0.8rem;">🔄 每3分钟</span>
+        <button class="refresh-btn" id="refreshBtn">⟳ 立即刷新</button>
+      </div>
+    </div>
+    <div id="matchContainer" class="match-list"></div>
+
+    <div class="footer-note">
+      <p>请勿攻击网站，本网站公益运行</p>
+      <p>本网站只是娱乐使用，请勿当真</p>
+      <p>本网站已稳定运行 <span id="runTime">--</span></p>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
