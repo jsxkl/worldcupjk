@@ -276,3 +276,22 @@ select { background: rgba(20,35,55,0.9); }
   .team-row { min-width: unset; }
   .time-box { margin-left: 0; }
 }
+.live-stream-btn {
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid #ef4444;
+    color: #ef4444;
+    padding: 0.25rem 0.9rem;
+    border-radius: 1.5rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+}
+.live-stream-btn:hover {
+    background: rgba(239, 68, 68, 0.3);
+    color: #fff;
+}
