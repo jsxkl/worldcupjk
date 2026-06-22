@@ -120,18 +120,6 @@
         };
     };
 
-    function getLiveLink(event, homeName, awayName) {
-        if (event.links && Array.isArray(event.links)) {
-            const liveLink = event.links.find(link => 
-                link.rel && (link.rel.includes('now') || link.rel.includes('live') || link.rel.includes('game'))
-            );
-            if (liveLink && liveLink.href) return liveLink.href;
-            const first = event.links.find(link => link.href);
-            if (first && first.href) return first.href;
-        }
-        return `https://www.google.com/search?q=${encodeURIComponent(homeName + ' vs ' + awayName + ' 直播')}`;
-    }
-
     // ==================== 账号管理 ====================
     let currentAcc = '默认账号';
     const loadAccs = () => { try { return JSON.parse(localStorage.getItem(ACC_KEY)) || { list: ['默认账号'], current: '默认账号' }; } catch (e) { return { list: ['默认账号'], current: '默认账号' }; } };
@@ -466,9 +454,6 @@
             const { text: durationText, injury: injuryActive } = calcDuration(ev.date, statusType, injury);
             const injuryHtml = injuryActive !== null && statusType === 'STATUS_IN_PROGRESS' ? `<span class="injury-time">伤停补时 +${injuryActive}'</span>` : '';
 
-            const liveLink = getLiveLink(ev, hName, aName);
-            const liveBtnHtml = `<a href="${liveLink}" target="_blank" class="live-stream-btn" title="观看直播">📺</a>`;
-
             let predHtml = '';
             if (!pred) {
                 predHtml = `<div class="guess-box"><span style="color:#5a6e85;">🔮 暂无竞猜</span><button class="guess-btn" onclick="window._openDialog('${matchId}')">添加竞猜</button></div>`;
@@ -528,7 +513,6 @@
                             ${injuryHtml}
                         </div>
                     </div>
-                    ${liveBtnHtml}
                 </div>
                 <div class="score-area">
                     <div class="score-badge"><div class="score-label">全场</div><div class="score-num">${hs} - ${as}</div></div>
