@@ -5,7 +5,7 @@
     const ACC_KEY = 'wc_accs', PRED_PREFIX = 'wc_pred_', SETTINGS_KEY = 'wc_settings';
     const SITE_START = new Date("2026-06-18T00:00:00");
 
-    // ========== 48支参赛球队映射表 ==========
+    // ========== 48支参赛球队 + 中国（备用） ==========
     const countryMap = new Map([
         ['mexico', ['墨西哥', '🇲🇽']], ['south africa', ['南非', '🇿🇦']],
         ['korea republic', ['韩国', '🇰🇷']], ['south korea', ['韩国', '🇰🇷']], ['korea', ['韩国', '🇰🇷']],
@@ -28,10 +28,11 @@
         ['portugal', ['葡萄牙', '🇵🇹']], ['democratic republic of the congo', ['民主刚果', '🇨🇩']],
         ['dr congo', ['民主刚果', '🇨🇩']], ['uzbekistan', ['乌兹别克斯坦', '🇺🇿']],
         ['colombia', ['哥伦比亚', '🇨🇴']], ['england', ['英格兰', '🏴󠁧󠁢󠁥󠁮󠁧󠁿']],
-        ['croatia', ['克罗地亚', '🇭🇷']], ['ghana', ['加纳', '🇬🇭']], ['panama', ['巴拿马', '🇵🇦']]
+        ['croatia', ['克罗地亚', '🇭🇷']], ['ghana', ['加纳', '🇬🇭']], ['panama', ['巴拿马', '🇵🇦']],
+        // 备用
+        ['china', ['中国', '🇨🇳']]
     ]);
 
-    // 场馆映射（保持不变）
     const venueMap = new Map([
         ['metlife stadium', '大都会人寿体育场'], ['at&t stadium', 'AT&T体育场'],
         ['sofi stadium', 'SoFi体育场'], ['levi\'s stadium', '李维斯体育场'],
@@ -119,22 +120,19 @@
         };
     };
 
-    // 获取直播链接
     function getLiveLink(event, homeName, awayName) {
         if (event.links && Array.isArray(event.links)) {
             const liveLink = event.links.find(link => 
                 link.rel && (link.rel.includes('now') || link.rel.includes('live') || link.rel.includes('game'))
             );
             if (liveLink && liveLink.href) return liveLink.href;
-            // 使用第一个非预览/回顾链接
             const first = event.links.find(link => link.href);
             if (first && first.href) return first.href;
         }
-        // 后备：Google搜索
         return `https://www.google.com/search?q=${encodeURIComponent(homeName + ' vs ' + awayName + ' 直播')}`;
     }
 
-    // ==================== 账号管理（保持不变） ====================
+    // ==================== 账号管理 ====================
     let currentAcc = '默认账号';
     const loadAccs = () => { try { return JSON.parse(localStorage.getItem(ACC_KEY)) || { list: ['默认账号'], current: '默认账号' }; } catch (e) { return { list: ['默认账号'], current: '默认账号' }; } };
     const saveAccs = (d) => localStorage.setItem(ACC_KEY, JSON.stringify(d));
@@ -265,7 +263,7 @@
         document.getElementById('closeSettingsBtn').onclick = () => document.body.removeChild(overlay);
     }
 
-    // ==================== UI 元素 ====================
+    // ==================== 渲染逻辑 ====================
     const clockEl = document.getElementById('beijingClock');
     const matchContainer = document.getElementById('matchContainer');
     const updateTimeEl = document.getElementById('updateTime');
@@ -297,9 +295,118 @@
 
     let latestEvents = [];
 
-    // 竞猜弹窗（不变）
     const openDialog = (matchId, home, away) => {
-        // ... 保持原有完整逻辑 ...
+        const pred = getPreds()[matchId] || {};
+        if (typeof pred.winner === 'string' && pred.winner) pred.winner = [pred.winner];
+        if (typeof pred.totalGoals === 'number') pred.totalGoals = [pred.totalGoals];
+        if (pred.handicap && pred.handicap.pick && !pred.handicap.picks) {
+            pred.handicap.picks = [pred.handicap.pick];
+        }
+
+        const winnerPicks = pred.winner || [];
+        const totalGoalPicks = pred.totalGoals || [];
+        const handicapLine = pred.handicap?.line ?? '';
+        const handicapPicks = pred.handicap?.picks || [];
+
+        const winnerOptions = ['home', 'draw', 'away'];
+        const winnerLabels = { home: '主胜', draw: '平局', away: '客胜' };
+        const winnerHtml = winnerOptions.map(opt => `
+            <label class="handicap-option ${winnerPicks.includes(opt) ? 'active' : ''}">
+                <input type="checkbox" value="${opt}" ${winnerPicks.includes(opt) ? 'checked' : ''}>
+                ${winnerLabels[opt]}
+            </label>
+        `).join('');
+
+        const totalGoalsOptions = ['0', '1', '2', '3', '4', '5', '6', '7'];
+        const totalHtml = totalGoalsOptions.map(num => `
+            <label class="handicap-option ${totalGoalPicks.includes(parseInt(num)) ? 'active' : ''}">
+                <input type="checkbox" value="${num}" ${totalGoalPicks.includes(parseInt(num)) ? 'checked' : ''}>
+                ${num === '7' ? '7+' : num}
+            </label>
+        `).join('');
+
+        const handicapOptions = ['home', 'draw', 'away'];
+        const handicapLabels = { home: '让球主胜', draw: '让球平', away: '让球客胜' };
+        const handicapHtml = handicapOptions.map(opt => `
+            <label class="handicap-option ${handicapPicks.includes(opt) ? 'active' : ''}">
+                <input type="checkbox" value="${opt}" ${handicapPicks.includes(opt) ? 'checked' : ''}>
+                ${handicapLabels[opt]}
+            </label>
+        `).join('');
+
+        const form = `
+            <div style="background:#1a2f3f; padding:1.5rem; border-radius:1.5rem; max-width:420px; margin:2rem auto; color:#fff; box-shadow: 0 25px 50px rgba(0,0,0,0.5);">
+                <h3 style="margin-bottom:1rem;">📝 ${home} vs ${away}</h3>
+                <div style="margin:0.6rem 0;">
+                    <label>比分 (主-客): </label>
+                    <input id="ps" type="text" placeholder="2-1" value="${pred.score ? pred.score.home + '-' + pred.score.away : ''}" style="width:90px; background:#0f1e2f; border:1px solid #ffd966; color:#fff; padding:0.3rem; border-radius:0.5rem;">
+                </div>
+                <div style="margin:0.6rem 0;">
+                    <label>总进球 (多选): </label>
+                    <div class="handicap-options" id="totalGoalsGroup">${totalHtml}</div>
+                </div>
+                <div style="margin:0.6rem 0;">
+                    <label>胜负 (多选): </label>
+                    <div class="handicap-options" id="winnerGroup">${winnerHtml}</div>
+                </div>
+                <div style="margin:0.6rem 0;">
+                    <label>让球数: </label>
+                    <input id="phl" type="number" step="0.5" value="${handicapLine}" style="width:70px; background:#0f1e2f; border:1px solid #ffd966; color:#fff; padding:0.3rem; border-radius:0.5rem;" placeholder="例如-1">
+                    <span style="color:#94a3b8; font-size:0.7rem;">（正数=受让，负数=让球）</span>
+                </div>
+                <div style="margin:0.6rem 0;">
+                    <label>让球结果 (多选): </label>
+                    <div class="handicap-options" id="handicapGroup">${handicapHtml}</div>
+                </div>
+                <button id="saveBtn" style="background:#eab308; color:#0b121e; border:none; padding:0.5rem 1.5rem; border-radius:2rem; font-weight:bold; cursor:pointer; margin-right:1rem;">保存</button>
+                <button onclick="document.getElementById('predDialog').remove()" style="background:#475569; color:#fff; border:none; padding:0.5rem 1.5rem; border-radius:2rem; cursor:pointer;">取消</button>
+            </div>
+        `;
+        const d = document.createElement('div'); d.id = 'predDialog';
+        d.style.cssText = 'position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); display:flex; align-items:center; justify-content:center; z-index:9999;';
+        d.innerHTML = form;
+        document.body.appendChild(d);
+
+        d.querySelectorAll('.handicap-option').forEach(opt => {
+            opt.addEventListener('click', function (e) {
+                e.preventDefault();
+                const cb = this.querySelector('input');
+                cb.checked = !cb.checked;
+                this.classList.toggle('active', cb.checked);
+            });
+        });
+
+        document.getElementById('saveBtn').onclick = () => {
+            const data = {};
+            const s = document.getElementById('ps').value.trim();
+            if (s && /^\d+-\d+$/.test(s)) { const [h, a] = s.split('-').map(Number); if (h >= 0 && a >= 0) data.score = { home: h, away: a }; }
+
+            const totalGoals = [];
+            document.querySelectorAll('#totalGoalsGroup input:checked').forEach(cb => {
+                const val = parseInt(cb.value);
+                if (!isNaN(val)) totalGoals.push(val);
+            });
+            if (totalGoals.length > 0) data.totalGoals = totalGoals;
+
+            const winners = [];
+            document.querySelectorAll('#winnerGroup input:checked').forEach(cb => {
+                winners.push(cb.value);
+            });
+            if (winners.length > 0) data.winner = winners;
+
+            const hl = parseFloat(document.getElementById('phl').value);
+            const handicapPicks = [];
+            document.querySelectorAll('#handicapGroup input:checked').forEach(cb => {
+                handicapPicks.push(cb.value);
+            });
+            if (!isNaN(hl) && handicapPicks.length > 0) {
+                data.handicap = { line: hl, picks: handicapPicks };
+            }
+
+            savePred(matchId, Object.keys(data).length ? data : null);
+            d.remove();
+            renderMatches(latestEvents);
+        };
     };
     window._openDialog = (id) => {
         const ev = latestEvents.find(e => e.id === id);
@@ -359,9 +466,8 @@
             const { text: durationText, injury: injuryActive } = calcDuration(ev.date, statusType, injury);
             const injuryHtml = injuryActive !== null && statusType === 'STATUS_IN_PROGRESS' ? `<span class="injury-time">伤停补时 +${injuryActive}'</span>` : '';
 
-            // 生成直播按钮
             const liveLink = getLiveLink(ev, hName, aName);
-            const liveBtnHtml = `<a href="${liveLink}" target="_blank" class="live-stream-btn" title="观看直播">📺 直播</a>`;
+            const liveBtnHtml = `<a href="${liveLink}" target="_blank" class="live-stream-btn" title="观看直播">📺</a>`;
 
             let predHtml = '';
             if (!pred) {
@@ -404,6 +510,7 @@
                     total++;
                     if (isEnd && ok) correct++;
                 }
+
                 predHtml = `<div class="guess-box">${rows}<button class="guess-btn" onclick="window._openDialog('${matchId}')">修改竞猜</button></div>`;
             }
 
@@ -421,6 +528,7 @@
                             ${injuryHtml}
                         </div>
                     </div>
+                    ${liveBtnHtml}
                 </div>
                 <div class="score-area">
                     <div class="score-badge"><div class="score-label">全场</div><div class="score-num">${hs} - ${as}</div></div>
@@ -428,7 +536,6 @@
                     <div class="half-badge ${halfCls}">${halfTxt}</div>
                     <div class="status-tag">${statusT}</div>
                     ${venueDisplay ? `<div class="venue">📍 ${venueDisplay} ${fmtTime(ev.date)}</div>` : ''}
-                    ${liveBtnHtml}
                 </div>
                 ${predHtml}
             `;
