@@ -230,7 +230,6 @@ select { background: rgba(20,35,55,0.9); }
 }
 .footer-note p { margin: 0.2rem 0; }
 
-/* 让球多选按钮 */
 .handicap-options {
   display: flex; gap: 0.6rem; flex-wrap: wrap;
 }
@@ -267,7 +266,29 @@ select { background: rgba(20,35,55,0.9); }
   box-shadow: 0 4px 12px rgba(234,179,8,0.3);
 }
 
-/* 移动端优化 */
+/* 直播按钮 */
+.live-stream-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.5);
+  border-radius: 50%;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  margin-left: 0.5rem;
+  flex-shrink: 0;
+}
+.live-stream-btn:hover {
+  background: #ef4444;
+  color: #fff;
+  border-color: #ef4444;
+  transform: scale(1.1);
+}
+
 @media (max-width: 650px) {
   .app { padding: 1rem; }
   .stats { grid-template-columns: 1fr; }
@@ -275,25 +296,4 @@ select { background: rgba(20,35,55,0.9); }
   .score-area { width: 100%; justify-content: space-between; }
   .team-row { min-width: unset; }
   .time-box { margin-left: 0; }
-}
-.live-stream-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 2rem;
-    height: 2rem;
-    background: rgba(239, 68, 68, 0.15);
-    border: 1px solid rgba(239, 68, 68, 0.5);
-    border-radius: 50%;
-    font-size: 1rem;
-    text-decoration: none;
-    transition: all 0.2s ease;
-    margin-left: 0.5rem;
-    flex-shrink: 0;
-}
-.live-stream-btn:hover {
-    background: #ef4444;
-    color: #fff;
-    border-color: #ef4444;
-    transform: scale(1.1);
 }
