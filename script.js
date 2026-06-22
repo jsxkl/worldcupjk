@@ -5,74 +5,80 @@
     const ACC_KEY = 'wc_accs', PRED_PREFIX = 'wc_pred_', SETTINGS_KEY = 'wc_settings';
     const SITE_START = new Date("2026-06-18T00:00:00");
 
-   const countryMap = new Map([
-    // A组
-    ['mexico', ['墨西哥', '🇲🇽']],
-    ['south africa', ['南非', '🇿🇦']],
-    ['korea republic', ['韩国', '🇰🇷']],
-    ['czech republic', ['捷克', '🇨🇿']],
-    // B组
-    ['canada', ['加拿大', '🇨🇦']],
-    ['bosnia and herzegovina', ['波黑', '🇧🇦']],
-    ['qatar', ['卡塔尔', '🇶🇦']],
-    ['switzerland', ['瑞士', '🇨🇭']],
-    // C组
-    ['brazil', ['巴西', '🇧🇷']],
-    ['morocco', ['摩洛哥', '🇲🇦']],
-    ['haiti', ['海地', '🇭🇹']],
-    ['scotland', ['苏格兰', '🏴󠁧󠁢󠁳󠁣󠁴󠁿']],
-    // D组
-    ['united states', ['美国', '🇺🇸']],
-    ['usa', ['美国', '🇺🇸']], // 保留 USA 简写
-    ['paraguay', ['巴拉圭', '🇵🇾']],
-    ['australia', ['澳大利亚', '🇦🇺']],
-    ['turkey', ['土耳其', '🇹🇷']],
-    ['türkiye', ['土耳其', '🇹🇷']], // 保留土耳其语拼写
-    // E组
-    ['germany', ['德国', '🇩🇪']],
-    ['curaçao', ['库拉索', '🇨🇼']],
-    ['ivory coast', ['科特迪瓦', '🇨🇮']],
-    ['côte d\'ivoire', ['科特迪瓦', '🇨🇮']],
-    ['ecuador', ['厄瓜多尔', '🇪🇨']],
-    // F组
-    ['netherlands', ['荷兰', '🇳🇱']],
-    ['japan', ['日本', '🇯🇵']],
-    ['sweden', ['瑞典', '🇸🇪']],
-    ['tunisia', ['突尼斯', '🇹🇳']],
-    // G组
-    ['belgium', ['比利时', '🇧🇪']],
-    ['egypt', ['埃及', '🇪🇬']],
-    ['iran', ['伊朗', '🇮🇷']],
-    ['islamic republic of iran', ['伊朗', '🇮🇷']],
-    ['ir iran', ['伊朗', '🇮🇷']],
-    ['new zealand', ['新西兰', '🇳🇿']],
-    // H组
-    ['spain', ['西班牙', '🇪🇸']],
-    ['cape verde', ['佛得角', '🇨🇻']],
-    ['saudi arabia', ['沙特阿拉伯', '🇸🇦']],
-    ['uruguay', ['乌拉圭', '🇺🇾']],
-    // I组
-    ['france', ['法国', '🇫🇷']],
-    ['senegal', ['塞内加尔', '🇸🇳']],
-    ['iraq', ['伊拉克', '🇮🇶']],
-    ['norway', ['挪威', '🇳🇴']],
-    // J组
-    ['argentina', ['阿根廷', '🇦🇷']],
-    ['algeria', ['阿尔及利亚', '🇩🇿']],
-    ['austria', ['奥地利', '🇦🇹']],
-    ['jordan', ['约旦', '🇯🇴']],
-    // K组
-    ['portugal', ['葡萄牙', '🇵🇹']],
-    ['congo democratic republic', ['民主刚果', '🇨🇩']],
-    ['dr congo', ['民主刚果', '🇨🇩']],
-    ['uzbekistan', ['乌兹别克斯坦', '🇺🇿']],
-    ['colombia', ['哥伦比亚', '🇨🇴']],
-    // L组
-    ['england', ['英格兰', '🏴󠁧󠁢󠁥󠁮󠁧󠁿']],
-    ['croatia', ['克罗地亚', '🇭🇷']],
-    ['ghana', ['加纳', '🇬🇭']],
-    ['panama', ['巴拿马', '🇵🇦']]
-]);
+    // ========== 48支参赛球队映射表 ==========
+    const countryMap = new Map([
+        // A组
+        ['mexico', ['墨西哥', '🇲🇽']],
+        ['south africa', ['南非', '🇿🇦']],
+        ['korea republic', ['韩国', '🇰🇷']],
+        ['south korea', ['韩国', '🇰🇷']],
+        ['korea', ['韩国', '🇰🇷']],
+        ['czech republic', ['捷克', '🇨🇿']],
+        // B组
+        ['canada', ['加拿大', '🇨🇦']],
+        ['bosnia and herzegovina', ['波黑', '🇧🇦']],
+        ['qatar', ['卡塔尔', '🇶🇦']],
+        ['switzerland', ['瑞士', '🇨🇭']],
+        // C组
+        ['brazil', ['巴西', '🇧🇷']],
+        ['morocco', ['摩洛哥', '🇲🇦']],
+        ['haiti', ['海地', '🇭🇹']],
+        ['scotland', ['苏格兰', '🏴󠁧󠁢󠁳󠁣󠁴󠁿']],
+        // D组
+        ['united states', ['美国', '🇺🇸']],
+        ['usa', ['美国', '🇺🇸']],
+        ['paraguay', ['巴拉圭', '🇵🇾']],
+        ['australia', ['澳大利亚', '🇦🇺']],
+        ['turkey', ['土耳其', '🇹🇷']],
+        ['türkiye', ['土耳其', '🇹🇷']],
+        // E组
+        ['germany', ['德国', '🇩🇪']],
+        ['curaçao', ['库拉索', '🇨🇼']],
+        ['curacao', ['库拉索', '🇨🇼']],
+        ['ivory coast', ['科特迪瓦', '🇨🇮']],
+        ['côte d\'ivoire', ['科特迪瓦', '🇨🇮']],
+        ['ecuador', ['厄瓜多尔', '🇪🇨']],
+        // F组
+        ['netherlands', ['荷兰', '🇳🇱']],
+        ['japan', ['日本', '🇯🇵']],
+        ['sweden', ['瑞典', '🇸🇪']],
+        ['tunisia', ['突尼斯', '🇹🇳']],
+        // G组
+        ['belgium', ['比利时', '🇧🇪']],
+        ['egypt', ['埃及', '🇪🇬']],
+        ['iran', ['伊朗', '🇮🇷']],
+        ['islamic republic of iran', ['伊朗', '🇮🇷']],
+        ['ir iran', ['伊朗', '🇮🇷']],
+        ['new zealand', ['新西兰', '🇳🇿']],
+        // H组
+        ['spain', ['西班牙', '🇪🇸']],
+        ['cape verde', ['佛得角', '🇨🇻']],
+        ['saudi arabia', ['沙特阿拉伯', '🇸🇦']],
+        ['uruguay', ['乌拉圭', '🇺🇾']],
+        // I组
+        ['france', ['法国', '🇫🇷']],
+        ['senegal', ['塞内加尔', '🇸🇳']],
+        ['iraq', ['伊拉克', '🇮🇶']],
+        ['norway', ['挪威', '🇳🇴']],
+        // J组
+        ['argentina', ['阿根廷', '🇦🇷']],
+        ['algeria', ['阿尔及利亚', '🇩🇿']],
+        ['austria', ['奥地利', '🇦🇹']],
+        ['jordan', ['约旦', '🇯🇴']],
+        // K组
+        ['portugal', ['葡萄牙', '🇵🇹']],
+        ['democratic republic of the congo', ['民主刚果', '🇨🇩']],
+        ['dr congo', ['民主刚果', '🇨🇩']],
+        ['uzbekistan', ['乌兹别克斯坦', '🇺🇿']],
+        ['colombia', ['哥伦比亚', '🇨🇴']],
+        // L组
+        ['england', ['英格兰', '🏴󠁧󠁢󠁥󠁮󠁧󠁿']],
+        ['croatia', ['克罗地亚', '🇭🇷']],
+        ['ghana', ['加纳', '🇬🇭']],
+        ['panama', ['巴拿马', '🇵🇦']],
+    ]);
+
+    // ========== 场馆映射表（保持不变） ==========
     const venueMap = new Map([
         ['metlife stadium', '大都会人寿体育场'], ['at&t stadium', 'AT&T体育场'],
         ['sofi stadium', 'SoFi体育场'], ['levi\'s stadium', '李维斯体育场'],
@@ -325,7 +331,6 @@
 
     const openDialog = (matchId, home, away) => {
         const pred = getPreds()[matchId] || {};
-        // 兼容旧数据
         if (typeof pred.winner === 'string' && pred.winner) pred.winner = [pred.winner];
         if (typeof pred.totalGoals === 'number') pred.totalGoals = [pred.totalGoals];
         if (pred.handicap && pred.handicap.pick && !pred.handicap.picks) {
@@ -380,8 +385,8 @@
                 </div>
                 <div style="margin:0.6rem 0;">
                     <label>让球数: </label>
-                    <input id="phl" type="number" step="0.5" value="${handicapLine}" style="width:70px; background:#0f1e2f; border:1px solid #ffd966; color:#fff; padding:0.3rem; border-radius:0.5rem;" placeholder="例如1">
-                    <span style="color:#94a3b8; font-size:0.7rem;">（主队让球，负数=受让）</span>
+                    <input id="phl" type="number" step="0.5" value="${handicapLine}" style="width:70px; background:#0f1e2f; border:1px solid #ffd966; color:#fff; padding:0.3rem; border-radius:0.5rem;" placeholder="例如-1">
+                    <span style="color:#94a3b8; font-size:0.7rem;">（正数=受让，负数=让球）</span>
                 </div>
                 <div style="margin:0.6rem 0;">
                     <label>让球结果 (多选): </label>
@@ -530,7 +535,7 @@
 
                 if (pred.handicap && pred.handicap.picks && pred.handicap.picks.length > 0) {
                     const line = pred.handicap.line;
-                    const adj = h - line;
+                    const adj = h + line; // 正数受让，负数让球
                     const actual = adj > a ? 'home' : (adj < a ? 'away' : 'draw');
                     const ok = isEnd && pred.handicap.picks.includes(actual);
                     const pickMap = { home: '让球主胜', away: '让球客胜', draw: '让球平' };
@@ -653,7 +658,6 @@
         reader.readAsText(file);
     };
 
-    // 事件绑定
     accSelect.addEventListener('change', e => switchAcc(e.target.value));
     document.getElementById('newAccountBtn').addEventListener('click', () => {
         const name = prompt('新账号名称'); if (name) createAcc(name);
@@ -671,12 +675,11 @@
     });
     document.getElementById('refreshBtn').addEventListener('click', fetchAndRender);
 
-    // 初始化
     currentAcc = loadAccs().current;
     updateAccUI();
     updateClock();
     setInterval(updateClock, 50);
-    setInterval(fetchAndRender, 60000);
+    setInterval(fetchAndRender, 60000); // 1分钟
     setInterval(updateDurations, 1000);
     setInterval(updateRunTime, 1000);
     updateRunTime();
