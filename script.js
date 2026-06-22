@@ -5,39 +5,74 @@
     const ACC_KEY = 'wc_accs', PRED_PREFIX = 'wc_pred_', SETTINGS_KEY = 'wc_settings';
     const SITE_START = new Date("2026-06-18T00:00:00");
 
-    const countryMap = new Map([
-        ['united states', ['美国', '🇺🇸']], ['usa', ['美国', '🇺🇸']], ['mexico', ['墨西哥', '🇲🇽']],
-        ['canada', ['加拿大', '🇨🇦']], ['costa rica', ['哥斯达黎加', '🇨🇷']], ['panama', ['巴拿马', '🇵🇦']],
-        ['jamaica', ['牙买加', '🇯🇲']], ['haiti', ['海地', '🇭🇹']], ['honduras', ['洪都拉斯', '🇭🇳']],
-        ['el salvador', ['萨尔瓦多', '🇸🇻']], ['argentina', ['阿根廷', '🇦🇷']], ['brazil', ['巴西', '🇧🇷']],
-        ['uruguay', ['乌拉圭', '🇺🇾']], ['colombia', ['哥伦比亚', '🇨🇴']], ['peru', ['秘鲁', '🇵🇪']],
-        ['chile', ['智利', '🇨🇱']], ['ecuador', ['厄瓜多尔', '🇪🇨']], ['paraguay', ['巴拉圭', '🇵🇾']],
-        ['venezuela', ['委内瑞拉', '🇻🇪']], ['bolivia', ['玻利维亚', '🇧🇴']], ['england', ['英格兰', '🏴󠁧󠁢󠁥󠁮󠁧󠁿']],
-        ['france', ['法国', '🇫🇷']], ['germany', ['德国', '🇩🇪']], ['spain', ['西班牙', '🇪🇸']],
-        ['italy', ['意大利', '🇮🇹']], ['netherlands', ['荷兰', '🇳🇱']], ['belgium', ['比利时', '🇧🇪']],
-        ['portugal', ['葡萄牙', '🇵🇹']], ['croatia', ['克罗地亚', '🇭🇷']], ['switzerland', ['瑞士', '🇨🇭']],
-        ['denmark', ['丹麦', '🇩🇰']], ['sweden', ['瑞典', '🇸🇪']], ['poland', ['波兰', '🇵🇱']],
-        ['serbia', ['塞尔维亚', '🇷🇸']], ['austria', ['奥地利', '🇦🇹']], ['ukraine', ['乌克兰', '🇺🇦']],
-        ['turkey', ['土耳其', '🇹🇷']], ['türkiye', ['土耳其', '🇹🇷']], ['czech republic', ['捷克', '🇨🇿']],
-        ['scotland', ['苏格兰', '🏴󠁧󠁢󠁳󠁣󠁴󠁿']], ['wales', ['威尔士', '🏴󠁧󠁢󠁷󠁬󠁳󠁿']], ['hungary', ['匈牙利', '🇭🇺']],
-        ['romania', ['罗马尼亚', '🇷🇴']], ['greece', ['希腊', '🇬🇷']], ['norway', ['挪威', '🇳🇴']],
-        ['finland', ['芬兰', '🇫🇮']], ['iceland', ['冰岛', '🇮🇸']], ['slovakia', ['斯洛伐克', '🇸🇰']],
-        ['slovenia', ['斯洛文尼亚', '🇸🇮']], ['albania', ['阿尔巴尼亚', '🇦🇱']], ['north macedonia', ['北马其顿', '🇲🇰']],
-        ['bosnia and herzegovina', ['波黑', '🇧🇦']], ['russia', ['俄罗斯', '🇷🇺']], ['morocco', ['摩洛哥', '🇲🇦']],
-        ['senegal', ['塞内加尔', '🇸🇳']], ['tunisia', ['突尼斯', '🇹🇳']], ['nigeria', ['尼日利亚', '🇳🇬']],
-        ['cameroon', ['喀麦隆', '🇨🇲']], ['ghana', ['加纳', '🇬🇭']], ['egypt', ['埃及', '🇪🇬']],
-        ['algeria', ['阿尔及利亚', '🇩🇿']], ['south africa', ['南非', '🇿🇦']], ['ivory coast', ['科特迪瓦', '🇨🇮']],
-        ['côte d\'ivoire', ['科特迪瓦', '🇨🇮']], ['mali', ['马里', '🇲🇱']], ['burkina faso', ['布基纳法索', '🇧🇫']],
-        ['japan', ['日本', '🇯🇵']], ['korea republic', ['韩国', '🇰🇷']], ['south korea', ['韩国', '🇰🇷']],
-        ['korea', ['韩国', '🇰🇷']], ['iran', ['伊朗', '🇮🇷']], ['islamic republic of iran', ['伊朗', '🇮🇷']],
-        ['ir iran', ['伊朗', '🇮🇷']], ['saudi arabia', ['沙特阿拉伯', '🇸🇦']], ['qatar', ['卡塔尔', '🇶🇦']],
-        ['australia', ['澳大利亚', '🇦🇺']], ['united arab emirates', ['阿联酋', '🇦🇪']], ['china', ['中国', '🇨🇳']],
-        ['uzbekistan', ['乌兹别克斯坦', '🇺🇿']], ['oman', ['阿曼', '🇴🇲']], ['iraq', ['伊拉克', '🇮🇶']],
-        ['new zealand', ['新西兰', '🇳🇿']], ['georgia', ['格鲁吉亚', '🇬🇪']], ['israel', ['以色列', '🇮🇱']],
-        ['armenia', ['亚美尼亚', '🇦🇲']], ['azerbaijan', ['阿塞拜疆', '🇦🇿']], ['kazakhstan', ['哈萨克斯坦', '🇰🇿']],
-        ['india', ['印度', '🇮🇳']]
-    ]);
-
+   const countryMap = new Map([
+    // A组
+    ['mexico', ['墨西哥', '🇲🇽']],
+    ['south africa', ['南非', '🇿🇦']],
+    ['korea republic', ['韩国', '🇰🇷']],
+    ['czech republic', ['捷克', '🇨🇿']],
+    // B组
+    ['canada', ['加拿大', '🇨🇦']],
+    ['bosnia and herzegovina', ['波黑', '🇧🇦']],
+    ['qatar', ['卡塔尔', '🇶🇦']],
+    ['switzerland', ['瑞士', '🇨🇭']],
+    // C组
+    ['brazil', ['巴西', '🇧🇷']],
+    ['morocco', ['摩洛哥', '🇲🇦']],
+    ['haiti', ['海地', '🇭🇹']],
+    ['scotland', ['苏格兰', '🏴󠁧󠁢󠁳󠁣󠁴󠁿']],
+    // D组
+    ['united states', ['美国', '🇺🇸']],
+    ['usa', ['美国', '🇺🇸']], // 保留 USA 简写
+    ['paraguay', ['巴拉圭', '🇵🇾']],
+    ['australia', ['澳大利亚', '🇦🇺']],
+    ['turkey', ['土耳其', '🇹🇷']],
+    ['türkiye', ['土耳其', '🇹🇷']], // 保留土耳其语拼写
+    // E组
+    ['germany', ['德国', '🇩🇪']],
+    ['curaçao', ['库拉索', '🇨🇼']],
+    ['ivory coast', ['科特迪瓦', '🇨🇮']],
+    ['côte d\'ivoire', ['科特迪瓦', '🇨🇮']],
+    ['ecuador', ['厄瓜多尔', '🇪🇨']],
+    // F组
+    ['netherlands', ['荷兰', '🇳🇱']],
+    ['japan', ['日本', '🇯🇵']],
+    ['sweden', ['瑞典', '🇸🇪']],
+    ['tunisia', ['突尼斯', '🇹🇳']],
+    // G组
+    ['belgium', ['比利时', '🇧🇪']],
+    ['egypt', ['埃及', '🇪🇬']],
+    ['iran', ['伊朗', '🇮🇷']],
+    ['islamic republic of iran', ['伊朗', '🇮🇷']],
+    ['ir iran', ['伊朗', '🇮🇷']],
+    ['new zealand', ['新西兰', '🇳🇿']],
+    // H组
+    ['spain', ['西班牙', '🇪🇸']],
+    ['cape verde', ['佛得角', '🇨🇻']],
+    ['saudi arabia', ['沙特阿拉伯', '🇸🇦']],
+    ['uruguay', ['乌拉圭', '🇺🇾']],
+    // I组
+    ['france', ['法国', '🇫🇷']],
+    ['senegal', ['塞内加尔', '🇸🇳']],
+    ['iraq', ['伊拉克', '🇮🇶']],
+    ['norway', ['挪威', '🇳🇴']],
+    // J组
+    ['argentina', ['阿根廷', '🇦🇷']],
+    ['algeria', ['阿尔及利亚', '🇩🇿']],
+    ['austria', ['奥地利', '🇦🇹']],
+    ['jordan', ['约旦', '🇯🇴']],
+    // K组
+    ['portugal', ['葡萄牙', '🇵🇹']],
+    ['congo democratic republic', ['民主刚果', '🇨🇩']],
+    ['dr congo', ['民主刚果', '🇨🇩']],
+    ['uzbekistan', ['乌兹别克斯坦', '🇺🇿']],
+    ['colombia', ['哥伦比亚', '🇨🇴']],
+    // L组
+    ['england', ['英格兰', '🏴󠁧󠁢󠁥󠁮󠁧󠁿']],
+    ['croatia', ['克罗地亚', '🇭🇷']],
+    ['ghana', ['加纳', '🇬🇭']],
+    ['panama', ['巴拿马', '🇵🇦']]
+]);
     const venueMap = new Map([
         ['metlife stadium', '大都会人寿体育场'], ['at&t stadium', 'AT&T体育场'],
         ['sofi stadium', 'SoFi体育场'], ['levi\'s stadium', '李维斯体育场'],
